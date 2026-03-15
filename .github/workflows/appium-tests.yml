@@ -3,16 +3,27 @@ name: Appium Kotlin Tests
 on:
   workflow_dispatch:
     inputs:
+
       testClass:
         description: "Select Test Class"
         required: true
-        default: "AndroidAppAutomation"
+        default: "IOSAppAutomation"
         type: choice
         options:
           - AndroidAppAutomation
           - AndroidWebAutomation
           - IOSAppAutomation
           - IOSWebAutomation
+
+      platform:
+        description: "Select Platform"
+        required: true
+        default: "ios"
+        type: choice
+        options:
+          - android
+          - ios
+          - both
 
 jobs:
 
@@ -22,7 +33,11 @@ jobs:
 
     strategy:
       matrix:
-        platform: [android, ios]
+        platform: ${{ fromJson(
+          github.event.inputs.platform == 'both'
+          && '["android","ios"]'
+          || format('["{0}"]', github.event.inputs.platform)
+        ) }}
 
     env:
       LT_USERNAME: ${{ secrets.LT_USERNAME }}
@@ -48,13 +63,13 @@ jobs:
       - name: Install Dependencies
         run: mvn clean install -DskipTests
 
-      - name: Run Selected Test
+      - name: Run Test
         run: |
           echo "Running ${{ github.event.inputs.testClass }} on ${{ matrix.platform }}"
           mvn -Dtest=${{ github.event.inputs.testClass }} test
 
-      - name: Upload Test Reports
+      - name: Upload Reports
         uses: actions/upload-artifact@v4
         with:
-          name: test-report-${{ matrix.platform }}
+          name: report-${{ matrix.platform }}
           path: target/surefire-reports/
