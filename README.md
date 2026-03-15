@@ -1,226 +1,254 @@
 # Kotlin with Appium
 
-<p align="center">
-  <a href="https://www.lambdatest.com/blog/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java" target="_bank">Blog</a>
-  &nbsp; &#8901; &nbsp;
-  <a href="https://www.lambdatest.com/support/docs/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java" target="_bank">Docs</a>
-  &nbsp; &#8901; &nbsp;
-  <a href="https://www.lambdatest.com/learning-hub/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java" target="_bank">Learning Hub</a>
-  &nbsp; &#8901; &nbsp;
-  <a href="https://www.lambdatest.com/newsletter/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java" target="_bank">Newsletter</a>
-  &nbsp; &#8901; &nbsp;
-  <a href="https://www.lambdatest.com/certifications/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java" target="_bank">Certifications</a>
-  &nbsp; &#8901; &nbsp;
-  <a href="https://www.youtube.com/c/LambdaTest" target="_bank">YouTube</a>
-</p>
-&emsp;
-&emsp;
-&emsp;
+*Appium is a tool for automating native, mobile web, and hybrid applications on iOS and Android platforms. It supports iOS native apps written in Objective-C or Swift and Android native apps written in Java or Kotlin. It also supports mobile web apps accessed using a mobile browser.*
 
-_Appium is a tool for automating native, mobile web, and hybrid applications on iOS, Android, and Windows platforms. It supports iOS native apps written in Objective-C or Swift and Android native apps written in Java or Kotlin. It also supports mobile web apps accessed using a mobile browser (Appium supports Safari on iOS and Chrome or the built-in 'Browser' app on Android). Perform Appium automation tests on [LambdaTest's online cloud](https://www.lambdatest.com/appium-mobile-testing)._
+This project demonstrates how to perform **Appium automation testing on TestMu AI (Formerly LambdaTest) real device cloud**.
 
-*Learn the basics of [Appium testing on the LambdaTest platform](https://www.lambdatest.com/support/docs/getting-started-with-appium-testing/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java).*
+---
 
-[<img height="53" width="200" src="https://user-images.githubusercontent.com/70570645/171866795-52c11b49-0728-4229-b073-4b704209ddde.png">](https://appautomation.lambdatest.com/build)
+# Table of Contents
 
-## Table of Contents
+* Pre-requisites
+* Clone The Sample Project
+* Setting Up Authentication
+* Upload Your Application
+* Run Your First Test
+* Executing The Tests
 
-- [Pre-requisites](#pre-requisites)
-- [Run Your First Test](#run-your-first-test)
-- [Executing The Test](#executing-the-test)
+---
 
-## Pre-requisites
+# Pre-requisites
 
-Before you can start performing App automation testing with Appium, you would need to follow these steps:
+Before starting Appium automation with Kotlin, ensure the following tools are installed:
 
-- You need to install the latest version of [IntelliJ IDEA](https://www.jetbrains.com/idea/) because it provides Kotlin support. It is recommended by us but you can use any other IDE also.
-- Make sure that Kotlin plugins are enabled/installed in the IntelliJ IDEA if you are using a previous version.
-- Download and install **Maven** following the steps from [the official website](https://maven.apache.org/). Maven can also be installed easily on **Linux/MacOS** using [Homebrew](https://brew.sh/) package manager.
+* Install **IntelliJ IDEA** (recommended for Kotlin development)
+* Make sure **Kotlin plugin** is enabled in IntelliJ
+* Install **Java 11+**
+* Install **Maven**
 
-### Clone The Sample Project
+Check Maven installation:
 
-Clone the LambdaTest’s :link: [LT-appium-kotlin](https://github.com/LambdaTest/LT-appium-kotlin) repository as shown below:
+```bash
+mvn -version
+```
+
+---
+
+# Clone The Sample Project
 
 ```bash
 git clone https://github.com/LambdaTest/LT-appium-kotlin
+cd LT-appium-kotlin
 ```
->After you have cloned the project file open it in **InjelliJ IDEA** as a Maven project. Now right click on the LT-appium-kolin in the side bar under **Projects**, go to **Mark directory as** and choose it as **Source root**.
 
-### Setting Up Your Authentication
+Open the project in **IntelliJ IDEA** as a **Maven project**.
 
-Make sure you have your LambdaTest credentials with you to run test automation scripts on LambdaTest. To obtain your access credentials, [purchase a plan](https://billing.lambdatest.com/billing/plans?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java) or access the [Automation Dashboard](https://appautomation.lambdatest.com/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java).
+---
 
-Set LambdaTest `Username` and `Access Key` in environment variables.
+# Setting Up Authentication
 
-**For Linux/macOS:**
+To run tests on **TestMu AI (Formerly LambdaTest)** cloud, set your credentials.
+
+You can get credentials from the **Automation Dashboard**.
+
+### Linux / macOS
 
 ```bash
-export LT_USERNAME="YOUR_LAMBDATEST_USERNAME" \
-export LT_ACCESS_KEY="YOUR_LAMBDATEST_ACCESS_KEY"
+export LT_USERNAME="YOUR_USERNAME"
+export LT_ACCESS_KEY="YOUR_ACCESS_KEY"
 ```
 
-**For Windows:**
+### Windows
 
 ```powershell
-set LT_USERNAME="YOUR_LAMBDATEST_USERNAME" `
-set LT_ACCESS_KEY="YOUR_LAMBDATEST_ACCESS_KEY"
+set LT_USERNAME="YOUR_USERNAME"
+set LT_ACCESS_KEY="YOUR_ACCESS_KEY"
 ```
 
-### Upload Your Application
+---
 
-Upload your **_iOS_** application (.ipa file) or **_android_** application (.apk file) to the LambdaTest servers using our **REST API**. You need to provide your **Username** and **AccessKey** in the format `Username:AccessKey` in the **cURL** command for authentication. Make sure to add the path of the **appFile** in the cURL request. Here is an example cURL request to upload your app using our REST API:
+# Upload Your Application
 
-**Using App File:**
+Upload your **Android (.apk)** or **iOS (.ipa)** application using REST API.
 
-**Linux/macOS:**
+Example:
 
 ```bash
-curl -u "YOUR_LAMBDATEST_USERNAME:YOUR_LAMBDATEST_ACCESS_KEY" \
+curl -u "YOUR_USERNAME:YOUR_ACCESS_KEY" \
 --location --request POST 'https://manual-api.lambdatest.com/app/upload/realDevice' \
 --form 'name="Android_App"' \
---form 'appFile=@"/Users/macuser/Downloads/proverbial_android.apk"'
+--form 'appFile=@"/path/to/your/app.apk"'
 ```
 
-**Windows:**
+Response will return an **APP_URL** like:
 
-```powershell
-curl -u "YOUR_LAMBDATEST_USERNAME:YOUR_LAMBDATEST_ACCESS_KEY" -X POST "https://manual-api.lambdatest.com/app/upload/realDevice" -F "appFile=@"/Users/macuser/Downloads/proverbial_android.apk""
+```
+lt://APP123456789
 ```
 
-**Using App URL:**
+Use this **APP_URL** inside the test capability.
 
-**Linux/macOS:**
+---
 
-```bash
-curl -u "YOUR_LAMBDATEST_USERNAME:YOUR_LAMBDATEST_ACCESS_KEY" \
---location --request POST 'https://manual-api.lambdatest.com/app/upload/realDevice' \
---form 'name="Android_App"' \
---form 'url="https://prod-mobile-artefacts.lambdatest.com/assets/docs/proverbial_android.apk"'
+# Run Your First Test
+
+This project contains the following sample test classes:
+
+```
+src/test/kotlin/
+
+AndroidAppAutomation.kt
+AndroidWebAutomation.kt
+IOSAppAutomation.kt
+IOSWebAutomation.kt
 ```
 
-**Windows:**
+---
 
-```powershell
-curl -u "YOUR_LAMBDATEST_USERNAME:YOUR_LAMBDATEST_ACCESS_KEY" -X POST "https://manual-api.lambdatest.com/app/upload/realDevice" -d "{"url":"https://prod-mobile-artefacts.lambdatest.com/assets/docs/proverbial_android.apk","name":"sample.apk"}"
-```
+# W3C Capability Example
 
-**Tip:**
+The project uses **W3C standard capabilities**.
 
-- If you do not have any **.apk** or **.ipa** file, you can run your sample tests on LambdaTest by using our sample :link: [Android app](https://prod-mobile-artefacts.lambdatest.com/assets/docs/proverbial_android.apk) or sample :link: [iOS app](https://prod-mobile-artefacts.lambdatest.com/assets/docs/proverbial_ios.ipa).
-- Response of above cURL will be a **JSON** object containing the `App URL` of the format - <lt://APP123456789123456789> and will be used in the next step.
-
-## Run Your First Test
-
-**Test Scenario:** Check out [andorid.kt](https://github.com/LambdaTest/LT-appium-kotlin/blob/main/src/test/kotlin/android.kt) file to view the sample test script for android and [iOS.kt](https://github.com/LambdaTest/LT-appium-java/blob/main/src/test/kotlin/iOS.kt) for iOS.
-
-### Configuring Your Test Capabilities
-
-You can update your custom capabilities in test scripts. In this sample project, we are passing platform name, platform version, device name and app url (generated earlier) along with other capabilities like build name and test name via capabilities object. The capabilities object in the sample code are defined as:
-
-<Tabs className="docs__val">
-<TabItem value="android-config" label="Android" default>
+### Android Example
 
 ```kotlin
-    val caps = DesiredCapabilities()
-        caps.setCapability("autoAcceptAlerts", true)
-        caps.setCapability("platformName", "Android")
-        caps.setCapability("deviceName", "Galaxy S20")
-        caps.setCapability("platformVersion", "11")
-        caps.setCapability("platformName", "Android")
-        caps.setCapability("isRealMobile", true)
-        caps.setCapability("app", "APP_URL") //Add the app (.apk) url here
-        caps.setCapability("deviceOrientation", "PORTRAIT")
-        caps.setCapability("build", "Kotlin Vanilla - Android")
-        caps.setCapability("name", "Sample Test Kotlin")
-        caps.setCapability("console", true)
-        caps.setCapability("network", false)
-        caps.setCapability("visual", true)
-        caps.setCapability("device log", true)
+val capabilities = HashMap<String, Any>()
+
+capabilities["platformName"] = "Android"
+
+val ltOptions = HashMap<String, Any>()
+
+ltOptions["deviceName"] = "Galaxy S22"
+ltOptions["platformVersion"] = "12"
+ltOptions["isRealMobile"] = true
+ltOptions["app"] = "APP_URL"
+ltOptions["build"] = "Kotlin Appium Sample"
+ltOptions["name"] = "Android App Test"
+
+capabilities["LT:Options"] = ltOptions
 ```
 
-</TabItem>
+---
 
-<TabItem value="ios-config" label="iOS" default>
+### iOS Example
 
 ```kotlin
-    val caps = DesiredCapabilities()
-        caps.setCapability("platformName", "ios")
-        caps.setCapability("deviceName", "iPhone 12")
-        caps.setCapability("platformVersion", "14")
-        caps.setCapability("isRealMobile", true)
-        caps.setCapability("app", "APP_URL") //Add the app (.ipa) url here
-        caps.setCapability("deviceOrientation", "PORTRAIT")
-        caps.setCapability("build", "Kotlin Vanilla - iOS")
-        caps.setCapability("name", "Sample Test Kotlin")
-        caps.setCapability("device log", true)
+val capabilities = HashMap<String, Any>()
+
+capabilities["platformName"] = "iOS"
+
+val ltOptions = HashMap<String, Any>()
+
+ltOptions["deviceName"] = "iPhone 14"
+ltOptions["platformVersion"] = "16"
+ltOptions["isRealMobile"] = true
+ltOptions["app"] = "APP_URL"
+ltOptions["build"] = "Kotlin Appium Sample"
+ltOptions["name"] = "iOS App Test"
+
+capabilities["LT:Options"] = ltOptions
 ```
 
-</TabItem>
+---
 
-</Tabs>
+# Executing The Tests
 
-**Note:**
-
-- You must add the generated **APP_URL** to the `"app"` capability in the config file.
-- You can generate capabilities for your test requirements with the help of our inbuilt **[Capabilities Generator tool](https://www.lambdatest.com/capabilities-generator/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-kotlin)**. A more Detailed Capability Guide is available [here](https://www.lambdatest.com/support/docs/desired-capabilities-in-appium/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java).
-
-## Executing The Test
-
-1. Run the following command to install all the dependencies.
+### Step 1 — Install dependencies
 
 ```bash
 mvn clean install
 ```
 
-2. Firstly **build** the test in IntelliJ IDEA and make sure that it is build successfully.
+---
 
-3. Then, try running the current file by using **Run** button in the IDE.  
+### Step 2 — Run Android App Test
 
-**Info:** Your test results would be displayed on the test console (or command-line interface if you are using terminal/cmd) and on the :link: [LambdaTest App Automation Dashboard](https://appautomation.lambdatest.com/build?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java).
+```bash
+mvn -Dtest=AndroidAppAutomation test
+```
 
-## Additional Links
+---
 
-- [How to test locally hosted apps](https://www.lambdatest.com/support/docs/testing-locally-hosted-pages/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java)
-- [How to integrate LambdaTest with CI/CD](https://www.lambdatest.com/support/docs/integrations-with-ci-cd-tools/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java)
+### Step 3 — Run Android Web Test
 
-## Documentation & Resources :books:
+```bash
+mvn -Dtest=AndroidWebAutomation test
+```
 
-Visit the following links to learn more about LambdaTest's features, setup and tutorials around test automation, mobile app testing, responsive testing, and manual testing.
+---
 
-- [LambdaTest Documentation](https://www.lambdatest.com/support/docs/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java)
-- [LambdaTest Blog](https://www.lambdatest.com/blog/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java)
-- [LambdaTest Learning Hub](https://www.lambdatest.com/learning-hub/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java)
+### Step 4 — Run iOS App Test
 
-## LambdaTest Community :busts_in_silhouette:
+```bash
+mvn -Dtest=IOSAppAutomation test
+```
 
-The [LambdaTest Community](https://community.lambdatest.com/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java) allows people to interact with tech enthusiasts. Connect, ask questions, and learn from tech-savvy people. Discuss best practises in web development, testing, and DevOps with professionals from across the globe 🌎
+---
 
-## What's New At LambdaTest ❓
+### Step 5 — Run iOS Web Test
 
-To stay updated with the latest features and product add-ons, visit [Changelog](https://changelog.lambdatest.com/)
+```bash
+mvn -Dtest=IOSWebAutomation test
+```
 
-## About LambdaTest
+---
 
-[LambdaTest](https://www.lambdatest.com?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java) is a leading test execution and orchestration platform that is fast, reliable, scalable, and secure. It allows users to run both manual and automated testing of web and mobile apps across 3000+ different browsers, operating systems, and real device combinations. Using LambdaTest, businesses can ensure quicker developer feedback and hence achieve faster go to market. Over 500 enterprises and 1 Million + users across 130+ countries rely on LambdaTest for their testing needs.
+### Run All Tests
 
-### Features
+```bash
+mvn test
+```
 
-- Run Selenium, Cypress, Puppeteer, Playwright, and Appium automation tests across 3000+ real desktop and mobile environments.
-- Real-time cross browser testing on 3000+ environments.
-- Test on Real device cloud
-- Blazing fast test automation with HyperExecute
-- Accelerate testing, shorten job times and get faster feedback on code changes with Test At Scale.
-- Smart Visual Regression Testing on cloud
-- 120+ third-party integrations with your favorite tool for CI/CD, Project Management, Codeless Automation, and more.
-- Automated Screenshot testing across multiple browsers in a single click.
-- Local testing of web and mobile apps.
-- Online Accessibility Testing across 3000+ desktop and mobile browsers, browser versions, and operating systems.
-- Geolocation testing of web and mobile apps across 53+ countries.
-- LT Browser - for responsive testing across 50+ pre-installed mobile, tablets, desktop, and laptop viewports
+---
 
-[<img height="53" width="200" src="https://user-images.githubusercontent.com/70570645/171866795-52c11b49-0728-4229-b073-4b704209ddde.png">](https://www.lambdatest.com/)
+# View Test Results
 
-## We are here to help you :headphones:
+Once execution starts, you can view test execution on:
 
-- Got a query? we are available 24x7 to help. [Contact Us](mailto:support@lambdatest.com)
-- For more info, visit - [LambdaTest](https://www.lambdatest.com/?utm_source=github&utm_medium=repo&utm_campaign=LT-appium-java)
+**TestMu AI (Formerly LambdaTest) App Automation Dashboard**
+
+[https://appautomation.lambdatest.com/build](https://appautomation.lambdatest.com/build)
+
+You will be able to see:
+
+* Live test execution
+* Device logs
+* Network logs
+* Video recording
+* Screenshots
+
+---
+# Additional Resources
+
+To learn more about mobile automation and TestMu AI platform features, refer to the following documentation:
+
+* **TestMu AI Documentation**
+  [https://www.testmuai.com/support/docs/](https://www.testmuai.com/support/docs/)
+
+* **Getting Started with Appium Testing**
+  [https://www.testmuai.com/support/docs/getting-started-with-appium-testing/](https://www.testmuai.com/support/docs/getting-started-with-appium-testing/)
+
+* **CI/CD Integrations Guide**
+  [https://www.testmuai.com/support/docs/integrations-with-ci-cd-tools/](https://www.testmuai.com/support/docs/integrations-with-ci-cd-tools/)
+
+* **Real Device Cloud Testing**
+  [https://www.testmuai.com/support/docs/app-testing-on-real-devices/](https://www.testmuai.com/support/docs/app-testing-on-real-devices/)
+
+---
+
+
+# About TestMu AI
+
+**TestMu AI (Formerly LambdaTest)** is a unified AI-native testing platform that helps teams run automated and manual tests across real devices, browsers, and operating systems at scale.
+
+It enables teams to:
+
+* Run **Selenium, Cypress, Playwright, and Appium tests**
+* Test across **3000+ real browsers and devices**
+* Execute tests on **real mobile device cloud**
+* Accelerate test automation with **HyperExecute**
+* Perform **visual testing and accessibility testing**
+
+Organizations worldwide rely on **TestMu AI (Formerly LambdaTest)** to improve software quality and release faster.
+
+---

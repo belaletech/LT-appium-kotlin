@@ -1,0 +1,43 @@
+trigger: none
+
+parameters:
+  - name: testClass
+    displayName: Select Test Class
+    type: string
+    default: AndroidAppAutomation
+    values:
+      - AndroidAppAutomation
+      - AndroidWebAutomation
+      - IOSAppAutomation
+      - IOSWebAutomation
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+strategy:
+  matrix:
+    Android:
+      PLATFORM: android
+    IOS:
+      PLATFORM: ios
+
+steps:
+
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '11'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
+
+  - script: mvn clean install -DskipTests
+    displayName: Install Dependencies
+
+  - script: |
+      echo "Running ${{ parameters.testClass }} on $(PLATFORM)"
+      mvn -Dtest=${{ parameters.testClass }} test
+    displayName: Run Selected Test
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/surefire-reports/*.xml'
+      testRunTitle: 'Appium Kotlin Test Results'

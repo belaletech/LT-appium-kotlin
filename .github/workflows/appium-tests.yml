@@ -1,0 +1,60 @@
+name: Appium Kotlin Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      testClass:
+        description: "Select Test Class"
+        required: true
+        default: "AndroidAppAutomation"
+        type: choice
+        options:
+          - AndroidAppAutomation
+          - AndroidWebAutomation
+          - IOSAppAutomation
+          - IOSWebAutomation
+
+jobs:
+
+  run-tests:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform: [android, ios]
+
+    env:
+      LT_USERNAME: ${{ secrets.LT_USERNAME }}
+      LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: Install Dependencies
+        run: mvn clean install -DskipTests
+
+      - name: Run Selected Test
+        run: |
+          echo "Running ${{ github.event.inputs.testClass }} on ${{ matrix.platform }}"
+          mvn -Dtest=${{ github.event.inputs.testClass }} test
+
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-${{ matrix.platform }}
+          path: target/surefire-reports/
