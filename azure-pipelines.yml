@@ -1,6 +1,7 @@
 trigger: none
 
 parameters:
+
   - name: testClass
     displayName: Select Test Class
     type: string
@@ -11,33 +12,75 @@ parameters:
       - IOSAppAutomation
       - IOSWebAutomation
 
+  - name: platform
+    displayName: Select Platform
+    type: string
+    default: android
+    values:
+      - android
+      - ios
+      - both
+
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
-strategy:
-  matrix:
-    Android:
-      PLATFORM: android
-    IOS:
-      PLATFORM: ios
+variables:
+  LT_USERNAME: $(LT_USERNAME)
+  LT_ACCESS_KEY: $(LT_ACCESS_KEY)
 
-steps:
+stages:
 
-  - task: JavaToolInstaller@0
-    inputs:
-      versionSpec: '11'
-      jdkArchitectureOption: 'x64'
-      jdkSourceOption: 'PreInstalled'
+  # ---------------- ANDROID ----------------
 
-  - script: mvn clean install -DskipTests
-    displayName: Install Dependencies
+  - stage: AndroidTests
+    condition: or(eq('${{ parameters.platform }}','android'), eq('${{ parameters.platform }}','both'))
+    jobs:
 
-  - script: |
-      echo "Running ${{ parameters.testClass }} on $(PLATFORM)"
-      mvn -Dtest=${{ parameters.testClass }} test
-    displayName: Run Selected Test
+      - job: android_job
+        displayName: Run Android Tests
 
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '**/surefire-reports/*.xml'
-      testRunTitle: 'Appium Kotlin Test Results'
+        steps:
+
+          - checkout: self
+
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '11'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+
+          - script: mvn clean install -DskipTests
+            displayName: Install Dependencies
+
+          - script: |
+              echo "Running ${{ parameters.testClass }} on Android"
+              mvn -Dtest=${{ parameters.testClass }} test
+            displayName: Run Android Test
+
+
+  # ---------------- IOS ----------------
+
+  - stage: IOSTests
+    condition: or(eq('${{ parameters.platform }}','ios'), eq('${{ parameters.platform }}','both'))
+    jobs:
+
+      - job: ios_job
+        displayName: Run iOS Tests
+
+        steps:
+
+          - checkout: self
+
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '11'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+
+          - script: mvn clean install -DskipTests
+            displayName: Install Dependencies
+
+          - script: |
+              echo "Running ${{ parameters.testClass }} on iOS"
+              mvn -Dtest=${{ parameters.testClass }} test
+            displayName: Run iOS Test
