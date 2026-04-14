@@ -38,7 +38,7 @@ class AndroidAppAutomation {
         ltOptions["autoAcceptAlerts"]=true
         ltOptions["visual"] = true
         ltOptions["devicelog"] = true
-        ltOptions["app"]="lt://APP1016055391771271232899881"
+        ltOptions["app"]="<your_app_id>"
 
         options.setCapability("lt:options", ltOptions)
 

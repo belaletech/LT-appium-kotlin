@@ -40,7 +40,7 @@ class IOSAppAutomation {
 
         options.setCapability("lt:options", ltOptions)
 
-        options.setCapability("app", "lt://APP10160441901770385931312915")
+       options.setCapability("app", "<your_app_id>")
         options.setCapability("deviceOrientation", "PORTRAIT")
 
         val app = IOSDriver(hub, options)
